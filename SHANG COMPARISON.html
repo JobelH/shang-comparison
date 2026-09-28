@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shang 1 and Shang 2 hourly comparison</title>
+<style>
+:root{--bg:#fff;--fg:#0b0b0b;--mut:#52514e;--line:#c3c2b7;--surf:#f7f6f2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1a19;--fg:#f0efec;--mut:#c3c2b7;--line:#4a4a46;--surf:#242422}}
+:root[data-theme="dark"]{--bg:#1a1a19;--fg:#f0efec;--mut:#c3c2b7;--line:#4a4a46;--surf:#242422}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1040px;margin:0 auto;padding:16px}
+h1{font-size:22px;font-weight:500;margin:0 0 14px}
+.row{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin:0 0 12px}
+label{font-size:13px;color:var(--mut)}
+select,input{font:inherit;font-size:14px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+select:disabled{opacity:.5}
+.ph{display:grid;grid-template-columns:110px 84px 84px 96px;gap:6px 10px;align-items:center;font-size:13px;color:var(--mut);margin:0 0 12px;max-width:540px}
+button{font:inherit;font-size:13px;padding:5px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);cursor:pointer}
+.pn{margin:0 0 10px;border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+.pn summary{cursor:pointer;font-size:14px;font-weight:500}
+.tw{max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:8px;margin:8px 0}
+.tw table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:12px}
+.tw input,.tw select{width:100%;box-sizing:border-box;padding:2px 6px;height:28px;font-size:12px}
+.tw th{position:sticky;top:0;background:var(--surf);text-align:left;font-weight:500;color:var(--mut);padding:6px}
+.ph input{width:100%;box-sizing:border-box}
+#st{font-size:13px;color:var(--mut);margin:0 0 10px}
+.wrap{overflow-x:auto}
+.gr{display:grid;grid-template-columns:40px repeat(7,minmax(44px,1fr));gap:2px;font-size:11px;min-width:400px}
+.hh{color:var(--mut);text-align:center;padding:3px 0}
+.hl{color:var(--mut);text-align:right;padding-right:6px;line-height:30px}
+.cc{height:30px;display:flex;align-items:center;justify-content:center;border-radius:4px;font-variant-numeric:tabular-nums}
+.dd{font-weight:500;color:var(--fg);text-align:center;border-top:1px solid var(--line);padding-top:6px;line-height:18px}
+.dl{color:var(--mut);text-align:right;border-top:1px solid var(--line);padding:6px 6px 0 0;line-height:18px;white-space:nowrap}
+.cafe{flex:1 1 320px;min-width:0}
+.cafe h3{font-weight:500;margin:0 0 6px;font-size:14px}
+#lg{display:flex;align-items:center;gap:6px;margin:12px 0 4px;font-size:12px;color:var(--mut);flex-wrap:wrap}
+#lg i{width:18px;height:10px;border-radius:2px;display:inline-block}
+#r{font-size:13px;color:var(--mut);min-height:40px}
+</style></head><body><main>
+<h1 id="h1">Shang 1 and Shang 2 hourly comparison</h1>
+<div class="row">
+<label for="m">Metric</label>
+<select id="m"><option value="0">Gross sales (₱)</option><option value="1">Pax (guests)</option><option value="2">Transactions</option><option value="3">Avg sales per transaction (₱)</option><option value="4">Sales per seat (₱)</option><option value="5">Turnover (guests ÷ seats)</option><option value="6">Sales per sqm per hour (₱)</option><option value="7">Rent as % of sales</option></select>
+<label for="v">View</label>
+<select id="v"><option value="avg">Average per day</option><option value="tot">Total for period</option></select>
+<label for="mode">Show</label>
+<select id="mode"><option value="side">Side by side</option><option value="diff">Difference (Shang 1 − Shang 2)</option></select>
+</div>
+<div class="ph">
+<span></span><span>Seats</span><span>Area (sqm)</span><span>Rent/sqm/mo (₱)</span>
+<input id="n1" value="Shang 1" aria-label="Cafe 1 name"><input id="s1" type="number" value="62"><input id="a1" type="number" step="0.01" value="125.87"><input id="r1" type="number" value="3305">
+<input id="n2" value="Shang 2" aria-label="Cafe 2 name"><input id="s2" type="number" value="82"><input id="a2" type="number" step="0.01" value="195"><input id="r2" type="number" value="1792">
+</div>
+<div id="pn"></div>
+<div style="font-size:12px;color:var(--mut);margin:-4px 0 8px;">Seats change Sales per seat and Turnover. Monthly rent = rent per sqm × floor area, so a smaller area lowers the rent and changes Sales per sqm per hour and Rent as % of sales.</div>
+<div class="row" style="margin:0 0 4px;">
+<label><input type="checkbox" id="wf" style="width:auto;margin-right:6px;">What-if: limit guests by seating capacity</label>
+<label for="l1">Max guests per seat per hour</label>
+<label for="l1">Shang 1</label><input id="l1" type="number" step="0.01" style="width:80px" placeholder="auto">
+<label for="l2">Shang 2</label><input id="l2" type="number" step="0.01" style="width:80px" placeholder="auto">
+</div>
+<div style="font-size:12px;color:var(--mut);margin:0 0 8px;">When on, busy hours can serve no more guests than seats allow, and sales drop in proportion to the guests lost. Auto uses each cafe's busiest hour at the seat count it had when its data was loaded (62 and 82 at first), so fewer seats than that start to cut guests.</div>
+<div id="st"></div>
+<div class="wrap"><div id="out"></div></div>
+<div id="lg"></div>
+<div id="r">Tap or hover a cell for details.</div>
+</main>
+<script>
+const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],idx=[2,0,1];
+const names=['Gross sales','Pax','Transactions','Avg sales per transaction','Sales per seat','Turnover','Sales per sqm per hour','Rent as % of sales'];
+const S1=[
+[[6,6,12339],[19,17,15788.37],[22,14,14338.76],[24,17,17808.69],[47,28,24652.04],[35,22,23337.84],[33,20,17703.4],[39,25,23028.56],[47,32,34977.17],[37,27,25319.52],[38,23,28256.7],null],
+[[12,11,12967.52],[34,24,35445.96],[43,33,27333.71],[66,44,45336.86],[49,39,34507.57],[63,39,34507.25],[69,39,40049.5],[49,37,36042.86],[58,38,40777.3],[73,52,49531.19],[54,33,33174.27],[10,3,6961.34]],
+[[9,9,5962.55],[24,21,24493.02],[68,43,45170.36],[70,43,51103.21],[63,37,38957.27],[63,40,37366.43],[59,39,37894.32],[45,25,27994.08],[71,37,41483.44],[59,46,40164.64],[87,49,55356.15],[5,2,2863.78]],
+[[6,5,4114.55],[19,14,12816.75],[38,22,24427.78],[68,37,41964.66],[26,19,17502.48],[53,28,33352.64],[51,24,25783.76],[60,27,32061.89],[45,28,36800.68],[50,31,42259.47],[61,31,35570.84],[1,1,228.75]],
+[[7,7,9081],[10,10,10586],[39,26,34191.84],[37,20,25889.88],[39,23,19810.51],[54,29,27529.41],[30,13,15127.36],[34,21,18559.68],[35,26,22909.55],[30,23,17523.83],[67,30,37674.44],[7,3,3365.01]],
+[[7,6,3227.44],[39,31,35090.1],[54,37,46685.55],[76,43,48193.02],[75,48,52376.16],[101,47,53228.74],[79,41,45125.18],[82,41,43432.34],[71,46,40364.26],[78,50,51099.78],[88,43,44265.62],null],
+[[1,1,0],[12,10,9889.32],[46,24,33697.67],[72,39,53142.41],[93,48,63379.32],[121,52,65430.31],[110,48,54808.53],[129,50,55420.17],[86,43,46894.46],[76,43,47228.13],[87,43,53538.15],[66,34,39659.82],[6,4,4760.53]]];
+const S2=[
+[[4,3,4941.79],[1,1,1502],[25,16,25882.3],[36,13,12373.33],[44,22,24592.29],[29,15,15028.08],[44,19,22591.27],[20,15,10869.19],[53,25,27655.97],[35,19,24618.07],[36,20,28208.31],[15,6,9297.55]],
+[[4,3,2272.04],[10,7,6731.83],[16,9,9117.83],[30,15,19467.99],[36,19,20959.11],[51,17,22924.98],[47,23,20032.54],[28,14,18906.94],[36,22,22327.87],[43,26,28214.16],[64,35,36787.2],[6,6,3448]],
+[[2,2,761.79],[4,4,2890.65],[21,13,11810.87],[44,21,31180.76],[40,19,26269.28],[52,18,24150.81],[35,14,14913.17],[18,11,10445.28],[35,14,26700.84],[50,22,39422.78],[39,21,29917.43],[39,15,28443.98]],
+[null,[6,4,4862.93],[10,7,6512.68],[30,14,18190.21],[37,13,24946.75],[41,17,23128.15],[21,10,9227.55],[29,17,18703.97],[32,17,20009.11],[26,13,16347.71],[64,28,34544.81],[13,7,5767.41]],
+[[4,4,4675],[10,7,8597.17],[17,12,14166.59],[23,13,16502.84],[39,16,22198.78],[46,20,26867.72],[14,8,9059.34],[45,26,26993.39],[17,9,8430.24],[46,23,24770.02],[63,33,34868.82],[4,3,3852.12]],
+[[5,4,2599.64],[20,11,14011.22],[39,19,32244.34],[58,29,33513.6],[46,25,33140.65],[84,39,53385.98],[112,40,50293.48],[111,43,51565.44],[62,29,33768.66],[89,43,73942.59],[69,37,44428.46],[72,26,36046.25]],
+[[4,4,3941],[19,14,17598.47],[43,20,34650.92],[77,30,56527.26],[126,42,76877.69],[134,49,67408.59],[102,41,36413.03],[77,29,33841.23],[71,33,36084.06],[88,37,47709.01],[85,36,66473.99],[14,9,14321.27]]];
+function rows(src,st){const r=[];src.forEach((a,d)=>a.forEach((c,i)=>{if(c)r.push({d:d,h:st[d]+i,p:c[0],t:c[1],s:c[2]});}));return r;}
+const C=[{n:'Shang 1',rows:rows(S1,[10,10,10,10,10,10,9]),base:62,p:'1'},{n:'Shang 2',rows:rows(S2,[10,10,10,10,10,10,10]),base:82,p:'2'}];
+const $=id=>document.getElementById(id),hl=h=>(h<10?'0':'')+h+':00';
+let m=0,eff=true,WI=false,H0=10,H1=21;
+const BASE=[62,82];
+function adj(c,d,h){const x=c.D[d][h];if(!x)return null;if(!WI||x[0]<=0||!(c.S>0))return x;
+  const f=Math.min(1,c.lim*c.S*c.dv[d]/x[0]);return f>=1?x:[x[0]*f,x[1]*f,x[2]*f];}
+function note(c,d,h){const x=c.D[d][h],y=adj(c,d,h);return(x&&y&&y[0]<x[0])?' (guests '+(x[0]/c.dv[d]).toFixed(1)+' → '+(y[0]/c.dv[d]).toFixed(1)+')':'';}
+function val(c,d,h){const x=adj(c,d,h);if(!x)return null;const k=eff?c.dv[d]:1;
+  if(m==3)return x[1]>0?x[2]/x[1]:null;
+  if(m==4)return c.S>0?x[2]/k/c.S:null;
+  if(m==5)return c.S>0?x[0]/k/c.S:null;
+  if(m==6)return c.A>0?x[2]/c.dv[d]/c.A:null;
+  if(m==7){const sl=x[2]/c.dv[d];return(c.rh!=null&&sl>0)?c.rh/sl*100:null;}
+  return x[idx[m]]/k;}
+function dayVal(c,d){let n=0,sp=0,s=0,tr=0,sa=0;
+  for(let h=H0;h<=H1;h++){const x=adj(c,d,h);if(x){n++;sp+=x[0];s+=x[idx[m<3?m:0]];tr+=x[1];sa+=x[2];}}
+  if(!n)return null;const k=eff?c.dv[d]:1;
+  if(m<3)return s/k;if(m==3)return tr>0?sa/tr:null;if(m==4)return c.S>0?sa/k/c.S:null;if(m==5)return c.S>0?sp/k/c.S:null;
+  if(m==6)return c.A>0?sa/c.dv[d]/n/c.A:null;return(c.rh!=null&&sa>0)?c.rh*n/(sa/c.dv[d])*100:null;}
+function fmt(x,sg){if(x==null)return '–';const a=Math.abs(x);let s;
+  if(m==7)s=a>99?'>99%':(a>=10?Math.round(a):a.toFixed(1))+'%';
+  else if(m==5)s=a.toFixed(2);
+  else if(m==0||m==3||m==4)s=a>=1000?(a/1000).toFixed(1)+'k':Math.round(a)+'';
+  else if(m==6)s=Math.round(a)+'';
+  else s=eff?a.toFixed(1):Math.round(a)+'';
+  return sg?(x<0?'−':'+')+s:s;}
+function full(x){if(x==null)return '–';if(m==7)return x.toFixed(1)+'% of sales';if(m==5)return x.toFixed(2)+' guests per seat';
+  if(m==0||m==3||m==4||m==6)return '₱'+Math.round(x).toLocaleString();return eff?x.toFixed(1):Math.round(x)+'';}
+function grid(vf,df,sf,sg){
+  let s='<div class="gr"><div></div>'+days.map(t=>'<div class="hh">'+t+'</div>').join('');
+  for(let h=H0;h<=H1;h++){s+='<div class="hl">'+hl(h)+'</div>';
+    for(let d=0;d<7;d++){const x=vf(d,h);
+      if(x==null)s+='<div class="cc" style="color:var(--mut)">–</div>';
+      else{const q=sf(x);s+='<div class="cc" data-d="'+d+'" data-h="'+h+'" style="background:'+q[0]+';color:'+q[1]+'">'+fmt(x,sg)+'</div>';}}}
+  s+='<div class="dl">'+(m<3?'Total':'Avg')+'</div>';
+  for(let d=0;d<7;d++)s+='<div class="dd">'+fmt(df(d),sg)+'</div>';
+  return s+'</div>';}
+function draw(){
+  m=+$('m').value;const fixed=(m==3||m==6||m==7);$('v').disabled=fixed;eff=fixed||$('v').value=='avg';
+  const mode=$('mode').value;
+  WI=$('wf').checked;
+  C.forEach((c,ci)=>{c.n=$('n'+c.p).value||'Cafe '+c.p;$('ttl'+c.p).textContent=c.n;c.dv=days.map((_,i)=>Math.max(1,parseFloat($('dv'+c.p+'_'+i).value)||1));c.D=[{},{},{},{},{},{},{}];c.rows.forEach(r=>{if(r.h!=null&&r.p!=null&&r.t!=null&&r.s!=null)c.D[r.d][r.h]=[r.p,r.t,r.s];});c.S=parseFloat($('s'+c.p).value)||0;c.A=parseFloat($('a'+c.p).value)||0;c.R=parseFloat($('r'+c.p).value)||0;
+    let pk=0;c.D.forEach((o,d)=>{for(const h in o){const t=o[h][0]/c.dv[d];if(t>pk)pk=t;}});
+    c.auto=pk/(c.base||1);$('l'+c.p).placeholder=c.auto.toFixed(2);c.lim=parseFloat($('l'+c.p).value)||c.auto;
+    let n0=0,wk=0,w0=0,aff=0;c.D.forEach((o,d)=>{for(const h in o){n0++;w0+=o[h][2]/c.dv[d];const y=adj(c,d,+h);wk+=y[2]/c.dv[d];if(y[0]<o[h][0])aff++;}});
+    c.wk=wk;c.w0=w0;c.aff=aff;
+    const ed=new Date($('de'+c.p).value);let cn=c.dv;c.mname='the month';
+    if(!isNaN(ed)){const y=ed.getUTCFullYear(),mo=ed.getUTCMonth(),nd=new Date(Date.UTC(y,mo+1,0)).getUTCDate();cn=[0,0,0,0,0,0,0];
+      for(let q=1;q<=nd;q++)cn[(new Date(Date.UTC(y,mo,q)).getUTCDay()+6)%7]++;c.mname=ed.toLocaleString('en',{month:'long',timeZone:'UTC'});}
+    c.mon=[0,0,0];c.D.forEach((o,d)=>{for(const h in o){const z=adj(c,d,+h),k=cn[d]/c.dv[d];c.mon[0]+=z[0]*k;c.mon[1]+=z[1]*k;c.mon[2]+=z[2]*k;}});
+    c.rh=(c.A>0&&c.R>0&&n0>0)?c.A*c.R/(n0*52/12):null;});
+  let lo=99,hi=-1;C.forEach(c=>c.D.forEach(o=>{for(const h in o){if(+h<lo)lo=+h;if(+h>hi)hi=+h;}}));H0=lo<99?lo:10;H1=hi>-1?hi:21;
+  $('h1').textContent=C[0].n+' and '+C[1].n+' hourly comparison';$('mode').options[1].textContent='Difference ('+C[0].n+' − '+C[1].n+')';
+  const rp=c=>c.A>0&&c.R>0&&c.wk>0?' (rent '+(c.A*c.R/(c.wk*52/12)*100).toFixed(1)+'% of sales)':'';
+  const kp=c=>{const mo=c.wk*52/12,a=['₱'+Math.round(c.wk).toLocaleString()+' sales a week'];a.push('total for '+c.mname+': ₱'+Math.round(c.mon[2]).toLocaleString()+' sales, '+Math.round(c.mon[0]).toLocaleString()+' guests, '+Math.round(c.mon[1]).toLocaleString()+' transactions');
+    if(c.S>0)a.push('₱'+Math.round(c.wk/c.S).toLocaleString()+' per seat a week');
+    if(c.A>0)a.push('₱'+Math.round(mo/c.A).toLocaleString()+' per sqm a month');
+    if(c.A>0&&c.R>0&&mo>0)a.push('rent ₱'+Math.round(c.A*c.R).toLocaleString()+' a month ('+(c.A*c.R/mo*100).toFixed(1)+'% of sales)');
+    return '<div><b style="font-weight:500;color:var(--fg)">'+c.n+'</b>: '+a.join(' · ')+'</div>';};
+  const lost=c=>WI?'<div style="color:var(--mut)">'+c.n+': '+(c.aff?'the seat limit cuts about ₱'+Math.round(c.w0-c.wk).toLocaleString()+' of weekly sales ('+((c.w0-c.wk)/c.w0*100).toFixed(1)+'%) across '+c.aff+' busy hours':'seats are enough, no sales lost')+'</div>':'';
+  $('st').innerHTML=kp(C[0])+kp(C[1])+lost(C[0])+lost(C[1]);
+  const col=m==7?'235,104,52':'42,120,214',sw=a=>'<span style="width:18px;height:10px;border-radius:2px;background:'+a+';display:inline-block"></span>';
+  let html='',lg='';
+  if(mode=='side'){
+    let max=0;C.forEach(c=>{for(let d=0;d<7;d++)for(let h=H0;h<=H1;h++){const x=val(c,d,h);if(x!=null&&x>max)max=x;}});
+    const sf=x=>{const t=m==7?.08+.92*Math.min(x,30)/30:.08+.92*(max>0?x/max:0);return ['rgba('+col+','+t.toFixed(2)+')',t>.5?'#fff':'var(--fg)'];};
+    html='<div style="display:flex;flex-wrap:wrap;gap:20px;">'+C.map(c=>'<div class="cafe"><h3>'+c.n+'</h3>'+grid((d,h)=>val(c,d,h),d=>dayVal(c,d),sf,false)+'</div>').join('')+'</div>';
+    lg='<span>Low</span>'+[.1,.35,.6,.8,1].map(a=>sw('rgba('+col+','+a+')')).join('')+'<span>'+(m==7?'30% or more':'High')+' (same scale for both cafes)</span>';
+    $('r').textContent='Tap or hover a cell to compare both cafes at that hour.';
+  }else{
+    let mx=0,a1=0,a2=0,tot=0;
+    for(let d=0;d<7;d++)for(let h=H0;h<=H1;h++){const x=val(C[0],d,h),y=val(C[1],d,h);if(x!=null&&y!=null){const df=x-y;tot++;if(df>0)a1++;else if(df<0)a2++;if(Math.abs(df)>mx)mx=Math.abs(df);}}
+    const dif=(d,h)=>{const x=val(C[0],d,h),y=val(C[1],d,h);return(x!=null&&y!=null)?x-y:null;};
+    const sf=x=>{const t=.12+.88*(mx>0?Math.abs(x)/mx:0);return [(x>=0?'rgba(42,120,214,':'rgba(235,104,52,')+t.toFixed(2)+')',t>.5?'#fff':'var(--fg)'];};
+    const df=d=>{const x=dayVal(C[0],d),y=dayVal(C[1],d);return(x!=null&&y!=null)?x-y:null;};
+    html=grid(dif,df,sf,true);
+    lg='<span>'+C[1].n+' higher</span>'+sw('rgba(235,104,52,0.9)')+sw('rgba(235,104,52,0.4)')+sw('rgba(128,128,128,0.15)')+sw('rgba(42,120,214,0.4)')+sw('rgba(42,120,214,0.9)')+'<span>'+C[0].n+' higher</span>';
+    $('r').textContent=tot?C[0].n+' is higher in '+a1+' of '+tot+' shared hours, '+C[1].n+' in '+a2+'. Tap or hover a cell for both values.':'Enter the missing seats, area or rent to compare this metric.';
+  }
+  $('out').innerHTML=html;$('lg').innerHTML=lg;
+  $('out').onmouseover=$('out').onclick=e=>{const c=e.target.closest('[data-d]');if(!c)return;const d=+c.dataset.d,h=+c.dataset.h;
+    $('r').textContent=days[d]+' '+hl(h)+'–'+hl(h+1)+' · '+names[m]+' · '+C[0].n+': '+full(val(C[0],d,h))+note(C[0],d,h)+' · '+C[1].n+': '+full(val(C[1],d,h))+note(C[1],d,h);};
+}
+['m','v','mode'].forEach(i=>$(i).onchange=draw);
+const jump=(ok,to)=>{if(!$('wf').checked&&!ok.includes(+$('m').value))$('m').value=to;draw();};
+['wf','l1','l2'].forEach(i=>$(i).oninput=$(i).onchange=draw);
+['s1','s2'].forEach(i=>$(i).oninput=()=>jump([4,5],4));
+['a1','a2'].forEach(i=>$(i).oninput=()=>jump([6,7],6));
+['r1','r2'].forEach(i=>$(i).oninput=()=>jump([7],7));
+
+function parseText(x){const rs=[];let cur=-1;
+ x.split(/\r?\n/).forEach(l=>{const t=l.trim();if(!t)return;const m=t.match(/^(\d{1,2}):\d{2}\s*[-–]\s*\d{1,2}:\d{2}\s*(.*)$/);
+  if(m){if(cur<0)return;const n=m[2].split(/\s+/).map(q=>parseFloat(q.replace(/,/g,''))).filter(v=>!isNaN(v));
+   if(n.length>=6)rs.push({d:cur,h:+m[1],p:n[0],t:n[2],s:n[4]});else if(n.length>=3)rs.push({d:cur,h:+m[1],p:n[0],t:n[1],s:n[2]});}
+  else{const k=t.toLowerCase().match(/^(mon|tue|wed|thu|fri|sat|sun)/);if(k)cur=['mon','tue','wed','thu','fri','sat','sun'].indexOf(k[1]);}});
+ return rs;}
+function pnl(c){const p=c.p;return '<details class="pn"><summary>Period and data: <span id="ttl'+p+'"></span></summary>'
++'<div class="row" style="margin:10px 0 6px"><label>From</label><input type="date" id="ds'+p+'" value="2026-09-01" style="width:150px"><label>To</label><input type="date" id="de'+p+'" value="2026-09-23" style="width:150px"><span id="nd'+p+'" style="font-size:13px;color:var(--mut)"></span></div>'
++'<div style="font-size:12px;color:var(--mut);margin:0 0 4px">Days counted per weekday, filled from the dates (you can edit them). Averages divide each weekday total by these.</div>'
++'<div class="row" style="gap:8px;margin:0 0 8px">'+days.map((n,i)=>'<label style="display:flex;align-items:center;gap:4px;font-size:12px">'+n+'<input type="number" min="1" id="dv'+p+'_'+i+'" style="width:52px"></label>').join('')+'</div>'
++'<div style="font-size:12px;color:var(--mut)">One row per hour: day, start hour (0 to 23), then pax, transactions and gross sales for the whole period.</div>'
++'<div class="tw"><table id="tb'+p+'"></table></div>'
++'<div class="row" style="margin:0 0 8px"><button data-a="add" data-p="'+p+'">Add row</button><button data-a="clr" data-p="'+p+'">Clear table</button></div>'
++'<textarea id="ps'+p+'" spellcheck="false" placeholder="Paste a full sheet from Excel or Google Sheets here to replace this table" style="width:100%;height:56px;box-sizing:border-box;font:12px monospace;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)"></textarea>'
++'<div id="ms'+p+'" style="font-size:12px;color:var(--mut);margin-top:4px"></div></details>';}
+function fillDv(c){const p=c.p,a=new Date($('ds'+p).value),b=new Date($('de'+p).value),n=[0,0,0,0,0,0,0];
+ if(!isNaN(a)&&!isNaN(b)&&b>=a&&(b-a)/864e5<400)for(let t=+a;t<=+b;t+=864e5)n[(new Date(t).getUTCDay()+6)%7]++;
+ n.forEach((v,i)=>$('dv'+p+'_'+i).value=Math.max(1,v));$('nd'+p).textContent=n.reduce((x,y)=>x+y,0)+' days';}
+function tbl(c){const p=c.p;let h='<colgroup><col style="width:17%"><col style="width:14%"><col style="width:16%"><col style="width:18%"><col style="width:26%"><col style="width:9%"></colgroup><thead><tr><th>Day</th><th>Hour</th><th>Pax</th><th>Trans</th><th>Gross sales</th><th></th></tr></thead><tbody>';
+ c.rows.forEach((r,i)=>{const inp=(k,st)=>'<td><input type="number" data-p="'+p+'" data-i="'+i+'" data-k="'+k+'" step="'+st+'" value="'+(r[k]==null?'':r[k])+'"></td>';
+  h+='<tr><td><select data-p="'+p+'" data-i="'+i+'" data-k="d">'+days.map((n,j)=>'<option value="'+j+'"'+(j==r.d?' selected':'')+'>'+n+'</option>').join('')+'</select></td>'+inp('h',1)+inp('p',1)+inp('t',1)+inp('s','any')+'<td><button data-a="del" data-p="'+p+'" data-i="'+i+'" aria-label="Delete row" style="padding:2px 6px">×</button></td></tr>';});
+ $('tb'+p).innerHTML=h+'</tbody>';$('ms'+p).textContent=c.rows.length+' rows';}
+$('pn').oninput=e=>{const t=e.target,id=t.id||'';
+ if(t.dataset.k){const r=C[t.dataset.p-1].rows[+t.dataset.i];r[t.dataset.k]=t.dataset.k=='d'?+t.value:(t.value===''?null:parseFloat(t.value));draw();}
+ else if(id.startsWith('dv'))draw();
+ else if(/^d[se]\d$/.test(id)){fillDv(C[id[2]-1]);draw();}
+ else if(id.startsWith('ps')){const c=C[id[2]-1],rs=parseText(t.value);
+  if(rs.length){c.rows=rs;c.base=parseFloat($('s'+c.p).value)||c.base;t.value='';tbl(c);draw();$('ms'+c.p).textContent='Pasted '+rs.length+' rows.';}
+  else if(t.value.trim())$('ms'+c.p).textContent='Could not read that. Start each day with its name, then one row per hour.';}};
+$('pn').onclick=e=>{const b=e.target.closest('button[data-a]');if(!b)return;const c=C[b.dataset.p-1],a=b.dataset.a;
+ if(a=='del')c.rows.splice(+b.dataset.i,1);
+ else if(a=='add'){const l=c.rows[c.rows.length-1];c.rows.push({d:l?l.d:0,h:l&&l.h!=null?Math.min(23,l.h+1):10,p:null,t:null,s:null});}
+ else c.rows=[];
+ tbl(c);draw();};
+$('pn').innerHTML=C.map(pnl).join('');C.forEach(c=>{fillDv(c);tbl(c);});
+['n1','n2'].forEach(i=>$(i).oninput=draw);
+draw();
+</script></body></html>
